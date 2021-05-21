@@ -1,0 +1,35 @@
+<div class="container">
+  <div>
+    <a  [routerLink]="['/receita/cadastro-receita']" routerLinkActive="active" class="btn btn-success" name="cadastro_receita">Registrar Receita</a>
+    <br/>
+    <br/>
+  </div>
+  <div>
+    <select class="form-control" [(ngModel)]="identificadorCompetencia" name="competencias">
+        <option name="identificadorCompetencia" value="">--Selecione a Competencia--</option>
+        <option  *ngFor="let competenca of competencias"  [value]="competenca.id">{{competenca.mes}}/{{competenca.ano}}</option>
+    </select>
+</div>
+
+    <div class="row">
+
+      <div class="">
+        <table class="table table-success" name="tblClass">
+          <tr>
+            <th>Nome</th>
+            <th>Descrição</th>
+            <th>Valor</th>
+            <th>Opções</th>
+          </tr>
+          <tbody>
+            <tr *ngFor="let receita of filterReceitas">
+                <td>{{receita.nome}}</td>
+                <td>{{receita.descricao}}</td>
+                <td>{{receita.valor}}</td>
+                <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+</div>

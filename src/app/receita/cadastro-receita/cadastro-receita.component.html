@@ -1,0 +1,55 @@
+<div class="container">
+  <h2>CADASTRO DE RECEITA</h2>
+  <br/><br/>
+  <div class="form-group">
+    <form #receitaForm="ngForm">
+       <div class="row">
+        <label class="col-sm-2 col-form-label">Nome</label>
+          <div class="col-sm-10">
+              <input [(ngModel)]="receitaRequest.nome" name="nome" #receitaName="ngModel" class="form-control"  type="text" required>
+         <div class="invalid-feedback">
+            <span>Nome é necessário</span>
+         </div>
+            </div>
+      </div>
+      <br/>
+      <div class="row">
+        <label class="col-sm-2 col-form-label">Descrição</label>
+        <div class="col-sm-10">
+          <textarea [(ngModel)]="receitaRequest.descricao" name="descricao" #receitaDescricao="ngModel" class="form-control"></textarea>
+        </div>
+      </div>
+      <br/>
+      <div class="row">
+        <label class="col-sm-2 col-form-label">Valor</label>
+        <div class="col-sm-10">
+          <input [(ngModel)]="receitaRequest.valor" name="valor" class="form-control" #receitaValor="ngModel" type="number">
+        </div>
+      </div>
+      <br/>
+      <div class="row">
+        <label class="col-sm-2 col-form-label">Receita Fixa</label>
+        <div class="col-sm-10">
+          <select [(ngModel)]="receitaRequest.receitaFixa" name="receitaFixa" class="form-control" #receitaReceitaFixa="ngModel">
+            <option value='true'>Sim</option>
+            <option value='false'>Não</option>
+          </select>
+        </div>
+      </div>
+      <br/>
+      <div class="row">
+        <label class="col-sm-2 col-form-label">Competência</label>
+        <div class="col-sm-10">
+          <select class="form-control" name="competencia" [(ngModel)]="receitaRequest.competenciaId">
+              <option *ngFor="let item of competencias" [value]="item.id">{{item.mes}}/{{item.ano}}</option>
+          </select>
+        </div>
+      </div>
+      <br/>
+      <div>
+        <button [disabled]="receitaForm.invalid" (click)="addCadastro()" class="btn btn-success mr-2">Salvar</button>
+        <button [routerLink]="['/receita']" class="btn btn-danger mr-2">Cancelar</button>
+      </div>
+  </form>
+  </div>
+</div>
