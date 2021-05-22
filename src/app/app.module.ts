@@ -16,6 +16,8 @@ import { FormsModule } from '@angular/forms';
 import { ReceitaModule } from './receita/receita.module';
 import { CadastroDespesaComponent } from './despesa/cadastro-despesa/cadastro-despesa.component';
 import { CadastroReceitaComponent } from './receita/cadastro-receita/cadastro-receita.component';
+import { ModalComponent } from './modal/modal.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import { CadastroReceitaComponent } from './receita/cadastro-receita/cadastro-re
     DespesaComponent,
     Erro404Component,
     CadastroDespesaComponent,
-    CadastroReceitaComponent
+    CadastroReceitaComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,

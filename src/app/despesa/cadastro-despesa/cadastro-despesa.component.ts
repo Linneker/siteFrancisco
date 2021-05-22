@@ -4,6 +4,7 @@ import { AutorizacaoApiService } from 'src/app/autorizacao-api/autorizacao-api.s
 import { Competencia } from 'src/app/competencia/competencia';
 import { CompetenciaService } from 'src/app/competencia/competencia.service';
 import { ResponseApi } from 'src/app/response/response-api';
+import { Despesa } from '../despesa';
 import { CadastroDespesaService } from './cadastro-despesa.service';
 import { DespesaRequest } from './despesa-request';
 
@@ -41,12 +42,24 @@ export class CadastroDespesaComponent implements OnInit {
   }
 
   addCadastro() : void{
+
     console.log(JSON.stringify(this.despesaRequest));
-    return;
+    const isFixa : boolean = (this.despesaRequest.despesaFixa==="1" ? true : false)
+    const aux = {
+      descricao : this.despesaRequest.descricao,
+      nome : this.despesaRequest.nome,
+      competenciaId: this.despesaRequest.competenciaId,
+      valor: this.despesaRequest.valor,
+      despesaFixa :isFixa
+    };
+
+    debugger;
+    console.log(JSON.stringify(this.despesaRequest));
+
     this.autorizcaoApiService.AutorizacaoApi().subscribe({
       next: (autorizacaoApiResponse: AutorizacaoApiResponse) =>{
         if(autorizacaoApiResponse.authenticated){
-          this.cadDespesaService.AddDespesa(this.despesaRequest, autorizacaoApiResponse.accessToken).subscribe({
+          this.cadDespesaService.AddDespesa(aux, autorizacaoApiResponse.accessToken).subscribe({
               next: (competencias: ResponseApi) => {
                 console.log(competencias);
               },
