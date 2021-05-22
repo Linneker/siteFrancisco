@@ -7,6 +7,9 @@ import { ReceitaRequest } from './receita-request';
 import { Component, OnInit } from '@angular/core';
 import { error } from '@angular/compiler/src/util';
 import { Competencia } from 'src/app/competencia/competencia';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ModelRetornoComponent } from '../../model-retorno/model-retorno.component';
+import { Router } from '@angular/router';
 
 @Component({
   templateUrl: './cadastro-receita.component.html',
@@ -16,10 +19,18 @@ export class CadastroReceitaComponent implements OnInit {
 
   competencias : Competencia[] = [];
   receitaRequest: ReceitaRequest = new ReceitaRequest();
-  constructor(private cadReceitaService : CadastroReceitaService,private competenciaService: CompetenciaService,private autorizcaoApiService : AutorizacaoApiService) { }
+  _redirect: string = "";
+  constructor(private cadReceitaService : CadastroReceitaService,
+    private competenciaService: CompetenciaService,
+    private autorizcaoApiService : AutorizacaoApiService,
+    private dialog: MatDialog,
+    public dialogRef: MatDialogRef<CadastroReceitaComponent>,
+    private  router: Router) { }
 
   ngOnInit(): void {
-     this.getCompetencia();
+    this._redirect = "receita";
+    this.mensagem("Cadastrado Com sucesso");
+    this.getCompetencia();
   }
 
   getCompetencia(): void{
@@ -55,6 +66,11 @@ export class CadastroReceitaComponent implements OnInit {
           this.cadReceitaService.AddReceita(this.receitaRequest, autorizacaoApiResponse.accessToken).subscribe({
               next: (competencias: ResponseApi) => {
                 console.log(competencias);
+                if(competencias.responseHttp==200){
+                  this._redirect = "receita";
+                  this.mensagem(competencias.mensagem);
+                }
+
               },
               error:err=>console.log(err)
           });
@@ -64,6 +80,27 @@ export class CadastroReceitaComponent implements OnInit {
         }
       },
       error:err=>console.log("erro: ",err)
+    });
+  }
+  goTo(): void{
+
+  }
+  mensagem(mensagem: string): void {
+
+    const dialogRef = this.dialog.open(CadastroReceitaComponent, {
+      width: '250px',
+
+    });
+    dialogRef.afterOpened().subscribe(result => {
+      console.log(mensagem);
+      this.router.navigate([`/${this._redirect}`, '']);
+
+      //this.mdComponent.setMensagem = mensagem;
+
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      //this.mdComponent.setRedirect = this._redirect;
     });
   }
 }

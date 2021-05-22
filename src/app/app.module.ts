@@ -16,6 +16,9 @@ import { FormsModule } from '@angular/forms';
 import { ReceitaModule } from './receita/receita.module';
 import { CadastroDespesaComponent } from './despesa/cadastro-despesa/cadastro-despesa.component';
 import { CadastroReceitaComponent } from './receita/cadastro-receita/cadastro-receita.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatDialogModule} from '@angular/material/dialog';
+import { ModelRetornoComponent } from './model-retorno/model-retorno.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +29,8 @@ import { CadastroReceitaComponent } from './receita/cadastro-receita/cadastro-re
     DespesaComponent,
     Erro404Component,
     CadastroDespesaComponent,
-    CadastroReceitaComponent
+    CadastroReceitaComponent,
+    ModelRetornoComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +38,10 @@ import { CadastroReceitaComponent } from './receita/cadastro-receita/cadastro-re
     AppRoutingModule,
     HttpClientModule,
     ReceitaModule,
-    DespesaModule
+    DespesaModule,
+    BrowserAnimationsModule,
+    MatDialogModule
+
   ],
   providers: [],
   bootstrap: [AppComponent]
