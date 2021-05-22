@@ -19,14 +19,12 @@
             <th>Nome</th>
             <th>Descrição</th>
             <th>Valor</th>
-            <th>Opções</th>
           </tr>
           <tbody>
             <tr *ngFor="let despesa of filterDespesas">
                 <td>{{despesa.nome}}</td>
                 <td>{{despesa.descricao}}</td>
                 <td>{{despesa.valor}}</td>
-                <td></td>
             </tr>
           </tbody>
         </table>

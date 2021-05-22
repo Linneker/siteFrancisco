@@ -13,7 +13,7 @@ export class CadastroReceitaService {
   receitaUrl: string ="https://bardochiquinho.acmesistemas.com.br/api/Receita/Add";
   constructor(private httpClient: HttpClient) { }
 
-  AddReceita(receita: ReceitaRequest,token: string): Observable<ResponseApi>
+  AddReceita(receita: any,token: string): Observable<ResponseApi>
   {
     return this.httpClient.post<ResponseApi>(this.receitaUrl,receita,{
       headers: new HttpHeaders()

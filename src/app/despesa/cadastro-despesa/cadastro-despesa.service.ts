@@ -13,7 +13,7 @@ export class CadastroDespesaService {
   despesaUrl: string ="https://bardochiquinho.acmesistemas.com.br/api/Despesa/Add";
   constructor(private httpClient: HttpClient) { }
 
-  AddDespesa(despesa: DespesaRequest,token: string): Observable<ResponseApi>
+  AddDespesa(despesa: any,token: string): Observable<ResponseApi>
   {
     return this.httpClient.post<ResponseApi>(this.despesaUrl,despesa,{
       headers: new HttpHeaders()

@@ -43,6 +43,15 @@ export class CadastroReceitaComponent implements OnInit {
     this.autorizcaoApiService.AutorizacaoApi().subscribe({
       next: (autorizacaoApiResponse: AutorizacaoApiResponse) =>{
         if(autorizacaoApiResponse.authenticated){
+          const isFixa : boolean = (this.receitaRequest.receitaFixa==="1" ? true : false)
+          const aux = {
+            descricao : this.receitaRequest.descricao,
+            nome : this.receitaRequest.nome,
+            competenciaId: this.receitaRequest.competenciaId,
+            valor: this.receitaRequest.valor,
+            receitaFixa :isFixa
+          };
+          const elemento =
           this.cadReceitaService.AddReceita(this.receitaRequest, autorizacaoApiResponse.accessToken).subscribe({
               next: (competencias: ResponseApi) => {
                 console.log(competencias);

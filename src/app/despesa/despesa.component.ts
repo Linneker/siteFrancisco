@@ -32,7 +32,6 @@ this.autorizcaoApiService.AutorizacaoApi().subscribe({
   next:(autorizcaoApiResponse: AutorizacaoApiResponse) => {
     this._autenticaoResponseApi =autorizcaoApiResponse;
     if(autorizcaoApiResponse.message=="OK"){
-    console.log(autorizcaoApiResponse.accessToken);
     this.competenciaService.GetCompetencia(autorizcaoApiResponse.accessToken).subscribe({
           next: (competencias: Competencia[]) => {
             this.competencias = competencias;
@@ -75,9 +74,12 @@ get filter():string{
 
 set identificadorCompetencia(value:string){
   this._identificadorCompetencia = value;
+
   if(value=="")
-  { if(this._autenticaoResponseApi.message=="OK"){
-      this.getDespesas(this._autenticaoResponseApi);}else{
+  {
+    if(this._autenticaoResponseApi.message=="OK"){
+      this.getDespesas(this._autenticaoResponseApi);
+    }else{
         this.autorizcaoApiService.AutorizacaoApi().subscribe({
           next: (autorizacaoApi: AutorizacaoApiResponse) => {
             this._autenticaoResponseApi = autorizacaoApi;
@@ -89,14 +91,15 @@ set identificadorCompetencia(value:string){
   else
   {
     if(this._autenticaoResponseApi.message=="OK"){
-      this.DespesaService.GetDespesasByCompetenciaId(this._autenticaoResponseApi.accessToken,value).subscribe({
-        next: (Despesas: Despesa[]) => {
+        this.DespesaService.GetDespesasByCompetenciaId(this._autenticaoResponseApi.accessToken,value).subscribe({
+          next: (Despesas: Despesa[]) => {
             this._despesas = Despesas;
             this.filterDespesas =this._despesas;
-        },
-        error: err=>console.log("ERRO: ",err)
-      });
-      }else{
+          },
+          error: err=>console.log("ERRO: ",err)
+        });
+      }
+      else{
         this.autorizcaoApiService.AutorizacaoApi().subscribe({
           next: (autorizcaoApiResponse: AutorizacaoApiResponse) =>{
             this._autenticaoResponseApi =autorizcaoApiResponse;
