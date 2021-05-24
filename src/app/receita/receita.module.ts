@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
 
+    CadastroReceitaComponent
   ],
   imports: [
     FormsModule,
@@ -18,6 +19,7 @@ import { FormsModule } from '@angular/forms';
         path: 'receita/cadastro-receita', component: CadastroReceitaComponent
       }
     ])
-  ]
+  ],
+  exports: [CadastroReceitaComponent]
 })
 export class ReceitaModule { }

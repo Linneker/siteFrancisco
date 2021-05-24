@@ -1,0 +1,64 @@
+<div class="main-content">
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                  <div class="card-header card-header-warning card-header-icon">
+                      <div class="card-icon">
+                          <i class="cash-coin">Competência: {{mes}}/{{ano}}</i>
+                      </div>
+                      <p class="card-category">Total receitas no Mês</p>
+                      <h3 class="card-title">{{recitaTotalMensal | currency:'BRL' : 'symbol':'0.1-2':'pt'}}</h3>
+                  </div>
+                  <div class="card-footer">
+                      <div class="stats">
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                  <div class="card-header card-header-success card-header-icon">
+                      <div class="card-icon">
+                          <i class="material-icons">Competência: {{mes}}/{{ano}}</i>
+                      </div>
+                      <p class="card-category">Gastos Total Mensal</p>
+                      <h3 class="card-title">{{despesaTotalMensal | currency:'BRL' : 'symbol':'0.1-2':'pt'}}</h3>
+                  </div>
+                  <div class="card-footer">
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                  <div class="card-header card-header-danger card-header-icon">
+                      <div class="card-icon">
+                          <i class="material-icons">Ano: {{ano}}</i>
+                      </div>
+                      <p class="card-category">Receita total Anual</p>
+                      <h3 class="card-title">{{receitaTotalAnual | currency:'BRL' : 'symbol':'0.1-2':'pt'}}</h3>
+                  </div>
+                  <div class="card-footer">
+                      <div class="stats">
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                  <div class="card-header card-header-info card-header-icon">
+                      <div class="card-icon">
+                          <i class="fa fa-twitter">Ano: {{ano}}</i>
+                      </div>
+                      <p class="card-category">Gasto Total Anual</p>
+                      <h3 class="card-title">{{despesaTotalAnual | currency:'BRL' : 'symbol':'0.1-2':'pt'}}</h3>
+                  </div>
+                  <div class="card-footer">
+                      <div class="stats">
+                      </div>
+                  </div>
+              </div>
+        </div>
+    </div>
+  </div>
+</div>

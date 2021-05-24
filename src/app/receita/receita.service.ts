@@ -31,4 +31,13 @@ export class ReceitaService {
       .set('Authorization','Bearer '+token)
     });
   }
+
+  GetReceitasByCompetenciaAnoAndCompetenciaMesOrderByMaiorValor(token: string, ano : number, mes : number): Observable<Receita[]>
+  {
+    return this.httpClient.get<Receita[]>(`${this.receitaUrl}/GetReceitaByCompetenciaAnoAndCompetenciaMesOrderByMaiorValor/${ano}/${mes}`,{
+      headers: new HttpHeaders()
+      .set('content-type','application/json')
+      .set('Authorization','Bearer '+token)
+    });
+  }
 }

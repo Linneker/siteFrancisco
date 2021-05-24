@@ -1,14 +1,16 @@
+import { AlertModalComponent } from './../../shared/alert-modal/alert-modal.component';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { Component, OnInit } from '@angular/core';
 import { AutorizacaoApiResponse } from 'src/app/autorizacao-api/autorizacao-api-response';
 import { AutorizacaoApiService } from 'src/app/autorizacao-api/autorizacao-api.service';
 import { Competencia } from 'src/app/competencia/competencia';
 import { CompetenciaService } from 'src/app/competencia/competencia.service';
 import { ResponseApi } from 'src/app/response/response-api';
+import { Despesa } from '../despesa';
 import { CadastroDespesaService } from './cadastro-despesa.service';
 import { DespesaRequest } from './despesa-request';
 
 @Component({
-  selector: 'app-cadastro-despesa',
   templateUrl: './cadastro-despesa.component.html',
   styleUrls: ['./cadastro-despesa.component.css']
 })
@@ -17,7 +19,12 @@ export class CadastroDespesaComponent implements OnInit {
 
   competencias : Competencia[] = [];
   despesaRequest: DespesaRequest = new DespesaRequest();
-  constructor(private cadDespesaService : CadastroDespesaService,private competenciaService: CompetenciaService,private autorizcaoApiService : AutorizacaoApiService) { }
+  bsModalRef: BsModalRef = new BsModalRef();
+
+  constructor(private cadDespesaService : CadastroDespesaService,
+    private competenciaService: CompetenciaService,
+    private autorizcaoApiService : AutorizacaoApiService,
+    private modalService: BsModalService) { }
 
   ngOnInit(): void {
      this.getCompetencia();
@@ -40,17 +47,40 @@ export class CadastroDespesaComponent implements OnInit {
     });
   }
 
+
+
   addCadastro() : void{
+
     console.log(JSON.stringify(this.despesaRequest));
-    return;
+    const isFixa : boolean = (this.despesaRequest.despesaFixa==="1" ? true : false)
+    const aux = {
+      descricao : this.despesaRequest.descricao,
+      nome : this.despesaRequest.nome,
+      competenciaId: this.despesaRequest.competenciaId,
+      valor: this.despesaRequest.valor,
+      despesaFixa :isFixa
+    };
+
+    debugger;
+    console.log(JSON.stringify(this.despesaRequest));
+
     this.autorizcaoApiService.AutorizacaoApi().subscribe({
       next: (autorizacaoApiResponse: AutorizacaoApiResponse) =>{
         if(autorizacaoApiResponse.authenticated){
-          this.cadDespesaService.AddDespesa(this.despesaRequest, autorizacaoApiResponse.accessToken).subscribe({
-              next: (competencias: ResponseApi) => {
-                console.log(competencias);
+          this.cadDespesaService.AddDespesa(aux, autorizacaoApiResponse.accessToken).subscribe({
+              next: (cadastrado: ResponseApi) => {
+              console.log(cadastrado);
+              if(cadastrado.responseHttp==200){
+                  this.mensagemCad("Gasto Cadastrado Com Sucesso!","success","/despesa");
+              }else{
+                this.mensagemCad("Gasto Não Cadastrado!","danger","despesa/cadastro-despesa");
+              }
+
               },
-              error:err=>console.log(err)
+              error:err => {
+                this.mensagemCad("Gasto Não Cadastrado!","danger","despesa/cadastro-despesa");
+                console.log(err);
+              }
           });
         }
         else{
@@ -59,6 +89,13 @@ export class CadastroDespesaComponent implements OnInit {
       },
       error:err=>console.log("erro: ",err)
     });
+  }
+
+  mensagemCad(mensagem:string, tipo:string,redirectTo:string){
+    this.bsModalRef = this.modalService.show(AlertModalComponent);
+    this.bsModalRef.content.tipo= tipo;
+    this.bsModalRef.content.mensagem= mensagem;
+    this.bsModalRef.content.redirectTo = redirectTo;//'/receita';
   }
 
 }

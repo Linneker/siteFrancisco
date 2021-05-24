@@ -10,7 +10,8 @@ import {Receita} from './receita';
   templateUrl: './receita.component.html',
   styleUrls: ['./receita.component.css']
 })
-export class ReceitaComponent implements OnInit {
+export class ReceitaComponent implements OnInit
+{
 
     filterReceitas:Receita[] =[];
     _identificadorCompetencia: string = "";
@@ -21,19 +22,21 @@ export class ReceitaComponent implements OnInit {
     compe : Competencia = new Competencia();
 
 
-  constructor(private receitaService : ReceitaService,private competenciaService: CompetenciaService,private autorizcaoApiService : AutorizacaoApiService) { }
+  constructor(private receitaService : ReceitaService,
+    private competenciaService: CompetenciaService,
+    private autorizcaoApiService : AutorizacaoApiService) { }
 
   ngOnInit(): void {
     this.getCompetencia();
   }
 
-getCompetencia(): void{
-  this.autorizcaoApiService.AutorizacaoApi().subscribe({
-    next:(autorizcaoApiResponse: AutorizacaoApiResponse) => {
-      this._autenticaoResponseApi =autorizcaoApiResponse;
-      if(autorizcaoApiResponse.message=="OK"){
-      console.log(autorizcaoApiResponse.accessToken);
-      this.competenciaService.GetCompetencia(autorizcaoApiResponse.accessToken).subscribe({
+  getCompetencia(): void{
+    this.autorizcaoApiService.AutorizacaoApi().subscribe({
+      next:(autorizcaoApiResponse: AutorizacaoApiResponse) => {
+        this._autenticaoResponseApi =autorizcaoApiResponse;
+        if(autorizcaoApiResponse.message=="OK")
+        {
+          this.competenciaService.GetCompetencia(autorizcaoApiResponse.accessToken).subscribe({
             next: (competencias: Competencia[]) => {
               this.competencias = competencias;
               console.log(this.competencias);
@@ -41,28 +44,74 @@ getCompetencia(): void{
             },
             error: err=>console.log("ERRO: ",err)
           });
-        }else{
+        }
+        else
+        {
           console.log("ERRO: ",autorizcaoApiResponse.message);
         }
       },
-    error: err=>console.log("ERRO: ",err)
-  });
-}
-    getReceitas(autorizcaoApiResponse: AutorizacaoApiResponse ) : void{
-        if(autorizcaoApiResponse.message=="OK"){
-          this.receitaService.GetReceitas(autorizcaoApiResponse.accessToken).subscribe({
-            next: (receitas: Receita[]) => {
+      error: err=>console.log("ERRO: ",err)
+    });
+  }
+
+  getReceitas(autorizcaoApiResponse: AutorizacaoApiResponse ) : void{
+    if(autorizcaoApiResponse.message=="OK"){
+        this.receitaService.GetReceitas(autorizcaoApiResponse.accessToken).subscribe({
+          next: (receitas: Receita[]) => {
+            this._receitas = receitas;
+            this.filterReceitas =this._receitas; //this._receitas.filter((receita: Receita) => receita.competenciaId.toLocaleLowerCase().indexOf(this._identificadorCompetencia.toLocaleLowerCase())>-1);
+          },
+        error: err=>console.log("ERRO: ",err)
+      });
+    }
+    else
+    {
+      console.log("ERRO: ",autorizcaoApiResponse.message);
+    }
+  }
+
+  getReceitasMaisEpressivosDoMes(): void
+  {
+    const now = new Date();
+    const mes : number= (now.getMonth()+1);
+    const ano : number= now.getFullYear();
+
+    debugger;
+    if(this._autenticaoResponseApi.message=="OK")
+    {
+      this.receitaService.GetReceitasByCompetenciaAnoAndCompetenciaMesOrderByMaiorValor(
+        this._autenticaoResponseApi.accessToken,ano,mes).subscribe({
+          next: (receitas: Receita[]) => {
+            this._receitas = receitas;
+            this.filterReceitas =this._receitas;
+          },
+          error: err=>console.log("ERRO: ",err)
+        });
+    }
+    else
+    {
+      this.autorizcaoApiService.AutorizacaoApi().subscribe({
+        next: (autorizcaoApiResponse: AutorizacaoApiResponse) =>{
+          this._autenticaoResponseApi =autorizcaoApiResponse;
+          if(autorizcaoApiResponse.message=="OK"){
+            this.receitaService.GetReceitasByCompetenciaAnoAndCompetenciaMesOrderByMaiorValor(
+            this._autenticaoResponseApi.accessToken,ano,mes).subscribe({
+              next: (receitas: Receita[]) => {
                 this._receitas = receitas;
-                this.filterReceitas =this._receitas; //this._receitas.filter((receita: Receita) => receita.competenciaId.toLocaleLowerCase().indexOf(this._identificadorCompetencia.toLocaleLowerCase())>-1);
-            },
-            error: err=>console.log("ERRO: ",err)
-          });
-          }else{
-            console.log("ERRO: ",autorizcaoApiResponse.message);
+                this.filterReceitas =this._receitas;
+              },
+              error:err=>console.log(err)
+            });
           }
-      }
-
-
+          else
+          {
+            this._receitas =  [];
+          }
+        },
+        error: err=>console.log("ERRO: ",err)
+      });
+    }
+  }
 
   set filter(value:string){
     this._filterBy = value;
@@ -76,19 +125,26 @@ getCompetencia(): void{
   set identificadorCompetencia(value:string){
     this._identificadorCompetencia = value;
     if(value=="")
-    { if(this._autenticaoResponseApi.message=="OK"){
-        this.getReceitas(this._autenticaoResponseApi);}else{
-          this.autorizcaoApiService.AutorizacaoApi().subscribe({
-            next: (autorizacaoApi: AutorizacaoApiResponse) => {
-              this._autenticaoResponseApi = autorizacaoApi;
-              this.getReceitas(autorizacaoApi);
-            }
-          });
-        }
+    {
+      if(this._autenticaoResponseApi.message=="OK")
+      {
+        this.getReceitas(this._autenticaoResponseApi);
+      }
+      else
+      {
+        this.autorizcaoApiService.AutorizacaoApi().subscribe({
+          next: (autorizacaoApi: AutorizacaoApiResponse) => {
+            this._autenticaoResponseApi = autorizacaoApi;
+            this.getReceitas(autorizacaoApi);
+          },
+          error: err=>console.log(err)
+        });
+      }
     }
     else
     {
-      if(this._autenticaoResponseApi.message=="OK"){
+      if(this._autenticaoResponseApi.message=="OK")
+      {
         this.receitaService.GetReceitasByCompetenciaId(this._autenticaoResponseApi.accessToken,value).subscribe({
           next: (receitas: Receita[]) => {
               this._receitas = receitas;
@@ -96,28 +152,33 @@ getCompetencia(): void{
           },
           error: err=>console.log("ERRO: ",err)
         });
-        }else{
-          this.autorizcaoApiService.AutorizacaoApi().subscribe({
-            next: (autorizcaoApiResponse: AutorizacaoApiResponse) =>{
-              this._autenticaoResponseApi =autorizcaoApiResponse;
-              if(autorizcaoApiResponse.message=="OK"){
-                this.receitaService.GetReceitasByCompetenciaId(this._autenticaoResponseApi.accessToken,value).subscribe({
-                  next: (receitas: Receita[]) => {
-                      this._receitas = receitas;
-                      this.filterReceitas =this._receitas;
-                  },
-                  error: err=>console.log("ERRO: ",err)
-                });
-              }else{
-                this._receitas =  [];
-              }
-            },
-            error: err=>console.log("ERRO: ",err)
-          });
-        }
+      }
+      else
+      {
+        this.autorizcaoApiService.AutorizacaoApi().subscribe({
+          next: (autorizcaoApiResponse: AutorizacaoApiResponse) =>{
+            this._autenticaoResponseApi =autorizcaoApiResponse;
+            if(autorizcaoApiResponse.message=="OK"){
+              this.receitaService.GetReceitasByCompetenciaId(this._autenticaoResponseApi.accessToken,value).subscribe({
+                next: (receitas: Receita[]) => {
+                  this._receitas = receitas;
+                  this.filterReceitas =this._receitas;
+                },
+                error: err=>console.log("ERRO: ",err)
+              });
+            }
+            else
+            {
+              this._receitas =  [];
+            }
+          },
+          error: err=>console.log("ERRO: ",err)
+        });
+      }
     }
-}
-  get identificadorCompetencia(){
+  }
+  get identificadorCompetencia()
+  {
     return this._identificadorCompetencia ;
   }
 }

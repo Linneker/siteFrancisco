@@ -25,7 +25,17 @@ export class DespesaService {
 
   GetDespesasByCompetenciaId(token: string, competenciaId : string): Observable<Despesa[]>
   {
+    console.log(`${this.DespesaUrl}/GetDespesaByCompetenciaId/${competenciaId}`);
+    debugger;
     return this.httpClient.get<Despesa[]>(`${this.DespesaUrl}/GetDespesaByCompetenciaId/${competenciaId}`,{
+      headers: new HttpHeaders()
+      .set('content-type','application/json')
+      .set('Authorization','Bearer '+token)
+    });
+  }
+  GetDespesaByCompetenciaAnoAndCompetenciaMesOrderByMaiorValor(token: string, ano : number, mes : number): Observable<Despesa[]>
+  {
+    return this.httpClient.get<Despesa[]>(`${this.DespesaUrl}/GetDespesaByCompetenciaAnoAndCompetenciaMesOrderByMaiorValor/${ano}/${mes}`,{
       headers: new HttpHeaders()
       .set('content-type','application/json')
       .set('Authorization','Bearer '+token)

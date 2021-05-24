@@ -17,9 +17,8 @@ export class CompetenciaService {
 
   GetCompetencia(token: string): Observable<Competencia[]>
   {
-    return this.httpClient.get<Competencia[]>(this.competenciaUrl,{
+    return this.httpClient.get<Competencia[]>(`${this.competenciaUrl}/GetCompetenciasOrderByDesc`,{
       headers: new HttpHeaders()
-      .set('Access-Control-Allow-Origin','https://bardochiquinho.acmesistemas.com.br/api/Competencia')
       .set('content-type','application/json')
       .set('Authorization','Bearer '+token)
      });

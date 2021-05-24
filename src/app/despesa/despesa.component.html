@@ -3,6 +3,9 @@
     <a  [routerLink]="['/despesa/cadastro-despesa']" routerLinkActive="active" class="btn btn-success" name="cadastro_despesa">Registro de Gastos</a>
     <br/>
     <br/>
+    <a   class="btn btn-success" name="receitas_mais_expressivos_mes" (click)="getDespesasMaisEpressivosDoMes()">Gastos mais expressivos do mês</a>
+    <br/>
+    <br/>
   </div>
   <div>
     <select class="form-control" [(ngModel)]="identificadorCompetencia" name="competencias">
@@ -24,7 +27,7 @@
             <tr *ngFor="let despesa of filterDespesas">
                 <td>{{despesa.nome}}</td>
                 <td>{{despesa.descricao}}</td>
-                <td>{{despesa.valor}}</td>
+                <td>{{despesa.valor | currency:'BRL' : 'symbol':'0.1-2':'pt'}}</td>
             </tr>
           </tbody>
         </table>
